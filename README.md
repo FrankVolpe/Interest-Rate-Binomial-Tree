@@ -8,7 +8,7 @@ One clear constraint I am choosing to undertake in building this program is avoi
 
 ## Current Functionality
 
-Construction of a binomial interest rate model for a risk-free, option-free, fixed-rate, coupon-paying bond. 
+Construction of a binomial interest rate tree for a risk-free, option-free, fixed-rate, coupon-paying bond. 
 
 ## Updates To Be Added
 
@@ -58,7 +58,7 @@ Importing *calculations.py* will also import *assumptions.py*
 BlankModel()
 ```
 
-This function takes the years until maturity from the assumptions.py file and saves a blank binomial tree to the *Output* variable
+This function takes the years until maturity from the *assumptions.py* file and saves a blank binomial tree to the *Output* variable
 
 ### Populate The Binomial Tree With Interest Rates
 
