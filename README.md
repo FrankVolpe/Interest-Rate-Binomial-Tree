@@ -2,7 +2,7 @@
 
 ## Summary
 
-This program is designed for the valuation of a bond using a binomial interest rate tree. This program does not yet support continuous compounding for interest rate projections. For beginners, I feel that I over-documented this program. It should be extremely straightforward to understand how everything works. Should you need any clarification, or to report any issues/improvements, do not hesitate to reach out. 
+This program is designed for the valuation of a bond using a binomial interest rate tree. This program does not yet support continuous compounding for interest rate projections. To accomodate beginners, I "over-documented" (if thats even possible) this program. It should be extremely straightforward to understand how everything works. Should you need any clarification, or to report any issues/improvements, do not hesitate to reach out. 
 
 One clear constraint I am choosing to undertake in building this program is avoiding the use of object oriented programming (OOP) in the back end calculations. The purpose of this is to minimize computational burden.
 
@@ -18,7 +18,7 @@ One clear constraint I am choosing to undertake in building this program is avoi
 * Valuation of bonds with embedded options
 * Valuation of floating rate bonds
   * Including caps and floors on floating rate bonds
-* Non risk-neutral valuations
+* Non risk-neutral probabilities between nodes
 * Continuously compounded volatility assumptions
 
 ## How to use:
@@ -44,7 +44,7 @@ V = .15
 Rf = .01
 ```
 
-### Import global variables and functions
+### Import Global Variables & Functions
 
 ```python
 from calculations import *
@@ -52,7 +52,7 @@ from calculations import *
 
 Importing *calculations.py* will also import *assumptions.py*
 
-### Create a blank binomial tree
+### Create A Blank Binomial Tree
 
 ```python
 BlankModel()
@@ -60,15 +60,15 @@ BlankModel()
 
 This function takes the years until maturity from the assumptions.py file and saves a blank binomial tree to the *Output* variable
 
-### Populate the binomial tree with interest rates
+### Populate The Binomial Tree With Interest Rates
 
 ```python
 PopulateRates()
 ```
 
-This function uses the volatility and current risk free rate to populate the binomial tree with relevant interest rate projections
+This function uses the volatility assumption and current risk free rate to populate the binomial tree with relevant interest rate projections
 
-### Populate the remainder of the model
+### Populate The Remainder Of The Model
 
 ```python
 PopulateVandCF()
@@ -77,7 +77,7 @@ PopulateVandCF()
 Populates the remainder of the model (Values and Cash Flows)
 
 
-### Understanding the output
+### Understanding The Output
 
 The *Output* variable is used to store all of the nodes and their respective parameters. It is a dictionary, structured as follows:
 
