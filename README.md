@@ -8,7 +8,7 @@ One clear constraint I am choosing to undertake in building this program is avoi
 
 ## Current Functionality
 
-* Construction of a binomial interest rate model for a risk-free, option-free, fixed-rate, coupon-paying bond. 
+Construction of a binomial interest rate model for a risk-free, option-free, fixed-rate, coupon-paying bond. 
 
 ## Updates To Be Added
 
