@@ -1,25 +1,43 @@
-## Coupon Rate of Bond
-C = .01
-
-## Strike Price
-K = 100
-
-## Maturity
-T = 5
+## C: Coupon (or premium over Rf) in bps
+## K: Price at Par
+## T: Years until Maturity
+## F: Is bond Floating Rate
+BondAttrs = {'C'      : 200,
+             'K'      : 100,
+             'T'      : 9,
+             'F'      : True}
 
 ## Interest Rate Volatility
 V = .15
 
 ## Current Risk Free Rate
-Rf = .01
+Rf = .05
 
-## Optionality
-Call = False
-Put = False
+#################
+## Optionality ##
+#################
 
 ## Terms of options
-OptionTerms = {'Price' :    101,
-               'T'     :    4}
+## Exists: Does option exist
+## Price: Price at which option is executed
+## T: Time at end of holdout period
+## Type: 'A'(American) or 'E' (European)
+CallTerms = {'Exists':    False,
+             'Price' :    101,
+             'T'     :    3,
+             'Type'  :    'A'}
+
+PutTerms = {'Exists' :    False,
+            'Price'  :    100,
+            'T'      :    3,
+            'Type'   :    'A'}
 
 ## Calculate Coupon
-Coupon = C*K
+def Coupon(R,
+           C=BondAttrs['C'],
+           K=BondAttrs['K'],
+           F=BondAttrs['F']):
+    if F == True:
+        return ((C*.0001)+R)*K
+    else:
+        return(C*.0001)*K
