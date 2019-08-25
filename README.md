@@ -72,7 +72,7 @@ PutTerms = {'Exists' :    False,
             'Type'   :    'A'}
 ```
 
-The above shows a bond that has an embedded call option (*CallTerms['Exists'] == True*, it is callable at T=5 for 101. The Option is American (For a European Option, set *CallTerms['Type'] to 'E'*) The bond does not have an embedded put option (*PutTerms['Exists'] == False*)
+The above shows a bond that has an embedded call option (*CallTerms['Exists'] == True*), it is callable at T=5 for 101. The Option is American (For a European Option, set *CallTerms['Type'] to 'E'*) The bond does not have an embedded put option (*PutTerms['Exists'] == False*)
 
 ### Import Global Variables & Functions
 
