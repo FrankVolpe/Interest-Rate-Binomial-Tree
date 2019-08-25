@@ -8,41 +8,71 @@ One clear constraint I am choosing to undertake in building this program is avoi
 
 ## Current Functionality
 
-Construction of a binomial interest rate tree for a risk-free, option-free, fixed-rate, coupon-paying bond. 
+Construction of a binomial interest rate tree for a risk-free, bond. Also supports Options and Floating rate bonds.
 
 ## Updates To Be Added
 
-* Display of interest rate nodes and parameters
 * Stronger command line functionality 
   * Updating assumptions & running program in the command line
-* Valuation of bonds with embedded options
-* Valuation of floating rate bonds
-  * Including caps and floors on floating rate bonds
+* Support of caps and floors on floating rate bonds
 * Non risk-neutral probabilities between nodes
 * Continuously compounded volatility assumptions
 
 ## How to use:
 
-### Set Assumptions
+### Set Bond Attributes
 
-Assumptions are set via global variables in the *assumptions.py* file. Assumptions are all labeled in the file. The excerpt below shows the variables that the program currently utilizes:
+Assumptions are set via the *BondAttrs* variable in the *assumptions.py* file. Assumptions are all labeled in the file. The excerpt below shows the *BondAttrs* variable:
 
 ```python
-## Coupon Rate of Bond
-C = .01
-
-## Strike Price
-K = 100
-
-## Years Until Maturity
-T = 5
-
-## Interest Rate Volatility
-V = .15
-
-## Current Risk Free Rate
-Rf = .01
+## C: Coupon (or premium over Rf) in bps
+## K: Price at Par
+## T: Years until Maturity
+## F: Is bond Floating Rate
+BondAttrs = {'C'      : 200,
+             'K'      : 100,
+             'T'      : 9,
+             'F'      : True}
 ```
+
+The above shows a bond with a Par value of 100, 9 years until maturity, and a floating rate coupon (*'BondAttrs['F'] == True*) that pays the risk free rate +200bps
+
+For a bond that pays a fixed coupon of 5% and a par value of 1000 that matures in 3 years, you would change the above variables to the following:
+
+```python
+## C: Coupon (or premium over Rf) in bps
+## K: Price at Par
+## T: Years until Maturity
+## F: Is bond Floating Rate
+BondAttrs = {'C'      : 500,
+             'K'      : 1000,
+             'T'      : 3,
+             'F'      : False}
+```
+
+### Pricing Bonds With Options
+
+Relevant data surrounding embedded options on the bonds are also set in the *assumptions.py* file and are as follows:
+
+```python
+## Terms of options
+## Exists: Does option exist
+## Price: Price at which option is executed
+## T: Time at end of holdout period
+## Type: 'A'(American) or 'E' (European)
+
+CallTerms = {'Exists':    True,
+             'Price' :    101,
+             'T'     :    5,
+             'Type'  :    'A'}
+
+PutTerms = {'Exists' :    False,
+            'Price'  :    100,
+            'T'      :    3,
+            'Type'   :    'A'}
+```
+
+The above shows a bond that has an embedded call option (*CallTerms['Exists'] == True*, it is callable at T=5 for 101. The Option is American (For a European Option, set *CallTerms['Type'] to 'E'*) The bond does not have an embedded put option (*PutTerms['Exists'] == False*)
 
 ### Import Global Variables & Functions
 
@@ -76,15 +106,25 @@ PopulateVandCF()
 
 Populates the remainder of the model (Values and Cash Flows)
 
+### Reflect The Exercise of Options
+
+```python
+AdjustForOptions()
+```
+
+Uses *PutTerms* and *CallTerms* from *assumptions.py* to to change the value of a called or put bond at their respective nodes, it also readjusts nodes to reflect changes in value
 
 ### Understanding The Output
 
 The *Output* variable is used to store all of the nodes and their respective parameters. It is a dictionary, structured as follows:
 
 ```python
-{ Time : { Node Key : { 'R' : Rate at Node,
-                        'CF' : Cash Flow at Node,
-                        'V' : Value at node }}}
+{ Time : { Node Key : { 'CF'     : Cash Flow at Node,
+                        'R'      : Rate at Node,
+                        'C'      : Coupon at Node,
+                        'V'      : Value at Node,
+                        'Called' : Call Option Exercised,
+                        'Put'    : Put Option Exercised }}}
 ```
 
 * Time, *int* 
@@ -97,8 +137,17 @@ The *Output* variable is used to store all of the nodes and their respective par
 * Rate at Node, *float*
   * Effective interest rate at node
 
+* Coupon at Node, *usually float*
+  * Coupon to be discounted at node
+
 * Cash Flow at Node, *usually float*
   * Expected cash flow at node (risk-neutral probability)
 
 * Value at Node, *float*
   * Discounted Cash Flow at node
+
+* Call Option Executed, *bool*
+  * Only added at Nodes where bond is called
+
+* Put Option Executed, *bool*
+  * Only added at Nodes where bond is put
